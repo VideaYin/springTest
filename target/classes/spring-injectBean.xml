@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:c="http://www.springframework.org/schema/c"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+
+    <!--<bean id="bean" class="com.imooc.IoC.learn.SpringIoCExam.Bean"/>-->
+
+    <!--<bean id="bean1" class="com.imooc.IoC.learn.SpringIoCExam.Bean1"/>-->
+
+    <!--<bean id="bean2" class="com.imooc.IoC.learn.SpringIoCExam.Bean2Factory" factory-method="getBean2"/>-->
+
+    <!--<bean id="bean3Factory" class="com.imooc.IoC.learn.SpringIoCExam.Bean3Factory"/>-->
+    <!--<bean id="bean3" class="com.imooc.IoC.learn.SpringIoCExam.Bean3" factory-bean="bean3Factory" factory-method="getBean3"/>-->
+
+
+
+    <bean id="anotherBean" class="com.imooc.IoC.learn.injectBean.AnotherBean"/>
+    <bean id="anotherBean1" class="com.imooc.IoC.learn.injectBean.AnotherBean"/>
+
+    <bean id="beanA" class="com.imooc.IoC.learn.injectBean.Bean">
+        <!--constructor-arg 标签，以构造方法的方式注入 ，示例为简单类型和对象类型-->
+        <constructor-arg index="0" name="anotherBean"
+                         type="com.imooc.IoC.learn.injectBean.AnotherBean"
+                         ref="anotherBean"/>
+        <constructor-arg index="1" name="string" type="java.lang.String" value="aaa"/>
+        <!--constructor-arg 标签，以构造方法的方式注入-->
+
+        <!-- property 标签，不需要用构造方法就能注入 示例为简单类型，对象类型，简单集合类型，对象集合类型 集合分为：List，Map,Set 和 -->
+        <property name="anotherBean1" ref="anotherBean1"/>
+        <property name="string1" value="bbbb"/>
+
+        <property name="stringList" >
+            <list>
+                <value>Listaaaaaa</value>
+                <value>Listbbbbbb</value>
+            </list>
+        </property>
+
+        <property name="anotherBeanList">
+            <list>
+                <ref bean="anotherBean"/>
+                <ref bean="anotherBean1"/>
+            </list>
+        </property>
+
+        <property name="stringSet">
+            <set>
+                <value>Setaaaa</value>
+                <value>Setbbbb</value>
+            </set>
+        </property>
+
+        <property name="anotherBeanSet">
+            <set>
+                <ref bean="anotherBean"/>
+                <ref bean="anotherBean1"/>
+            </set>
+        </property>
+
+        <property name="stringMap">
+            <map>
+                <entry key="ccccc" value="ddddd"/>
+                <entry key="eeeee" value="fffff"/>
+            </map>
+        </property>
+
+        <property name="anotherBeanMap">
+            <map>
+                <entry key-ref="anotherBean" value-ref="anotherBean"/>
+                <entry key-ref="anotherBean1" value-ref="anotherBean1"/>
+            </map>
+        </property>
+        
+        <property name="properties">
+            <props>
+                <prop key="aaaaa">bbbbbb</prop>
+            </props>
+        </property>
+        <!-- property 标签，不需要用构造方法就能注入 -->
+    </bean>
+
+    <!--<bean id="beanA1" class="com.imooc.IoC.learn.injectBean.Bean" c:anotherBean-ref="anotherBean" c:string="cccc" p:anotherBean1-ref="anotherBean1" p:string1="ddddd"/>-->
+
+</beans>

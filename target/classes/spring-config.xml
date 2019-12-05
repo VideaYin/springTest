@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+    http://www.springframework.org/schema/beans/spring-beans.xsd
+    http://www.springframework.org/schema/context
+    http://www.springframework.org/schema/context/spring-context.xsd
+    http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.2.xsd">
+
+    <!-- 扫描web相关的bean -->
+    <!--<context:component-scan base-package="com.imooc.IoC.learn.injectBean.annotate" />-->
+
+    <!-- 使用Annotation自动注册Bean，解决事物失效问题：在主容器中不扫描@Controller注解，在SpringMvc中只扫描@Controller注解。  -->
+    <context:component-scan base-package="com.imooc"><!-- base-package 如果多个，用“,”分隔 -->
+        <context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
+    </context:component-scan>
+
+    <!--申明此类用于junit-->
+    <!--<bean id="beforeAspectBiz" class="com.imooc.aop.learn.BeforeAspectBiz"/>-->
+    <!--<bean id="afterAspectBiz" class="com.imooc.aop.learn.AfterAspectBiz"/>-->
+
+    <!--<bean id="annotateAspectBiz" class="com.imooc.aop.learn.AnnotateAspectBiz"/>-->
+
+    <!--此类申明的id在下面用做切面的ref-->
+    <bean id="moocAspect" class="com.imooc.aop.learn.MoocAspect"/>
+
+    <aop:config>
+        <aop:aspect id="moovAspectAOP" ref="moocAspect">
+            <!--模糊匹配com.imooc.aop包下结尾为Biz的包中的所有类-->
+            <aop:pointcut id="moocPointcut" expression="execution(* com.imooc.aop.learn.Before*Biz.*(..))"/>
+            <aop:before method="beforeDo" pointcut-ref="moocPointcut"/>
+            <!--模糊匹配com.imooc.aop包下开头为After结尾为Biz的包中的所有类-->
+            <aop:after method="afterDo" pointcut="execution(* com.imooc.aop.learn.After*Biz.*(..))"/>
+        </aop:aspect>
+    </aop:config>
+
+
+    <!-- 这个配置一定要配置在component-scan以后 -->
+    <aop:aspectj-autoproxy proxy-target-class="true" />
+</beans>
